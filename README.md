@@ -123,11 +123,11 @@ NotificationChannelConfig
 NotificationConfig
 ```
 
-| Property name | Description                                                                                                                                             | Required |
-|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| channelId     | Notification channel id to display the notification                                                                                                     | yes      |
-| id            | Unique notification id                                                                                                                                  | yes      |
-| title         | Notification title                                                                                                                                      | yes      |
-| text          | Notification text                                                                                                                                       | yes      |
-| icon          | Icon name                                                                                                                                               | yes      |
+| Property name | Description                                                                                                                                             | Required              |
+|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| channelId     | Notification channel id to display the notification                                                                                                     | yes (Android 8+ only) |
+| id            | Unique notification id                                                                                                                                  | yes                   |
+| title         | Notification title                                                                                                                                      | yes                   |
+| text          | Notification text                                                                                                                                       | yes                   |
+| icon          | Icon name                                                                                                                                               | yes                   |
 | priority      | Priority of this notification. One of: <ul><li>&nbsp;0 – PRIORITY_DEFAULT (by default)</li><li>-1 – PRIORITY_LOW</li><li>-2 – PRIORITY_MIN</li><li>&nbsp;1 – PRIORITY_HIGH</li><li>&nbsp;2 – PRIORITY_MAX</li></ul> | no       |

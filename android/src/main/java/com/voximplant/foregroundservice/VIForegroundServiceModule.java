@@ -6,6 +6,7 @@ package com.voximplant.foregroundservice;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -48,9 +49,11 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
             return;
         }
 
-        if (!notificationConfig.hasKey("channelId")) {
-            promise.reject(ERROR_INVALID_CONFIG, "VIForegroundService: channelId is required");
-            return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!notificationConfig.hasKey("channelId")) {
+                promise.reject(ERROR_INVALID_CONFIG, "VIForegroundService: channelId is required");
+                return;
+            }
         }
 
         if (!notificationConfig.hasKey("id")) {
@@ -69,7 +72,7 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
         }
 
         if (!notificationConfig.hasKey("text")) {
-            promise.reject(ERROR_INVALID_CONFIG, "text is required");
+            promise.reject(ERROR_INVALID_CONFIG, "VIForegroundService: text is required");
             return;
         }
 

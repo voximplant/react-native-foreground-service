@@ -40,6 +40,9 @@ Next follow steps #4 and #5 from the manual installation section.
     ```
     <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
     ```
+    
+## Demo project
+Demo application: [react-native-foreground-service-demo](https://github.com/voximplant/react-native-foreground-service-demo)
   	
 ## Usage
 

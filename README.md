@@ -21,7 +21,7 @@ Next follow steps #4 and #5 from the manual installation section.
 
 ### Manual installation (Android only)
 1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-    - Add `import com.voximplant.VIForegroundServicePackage;` to the imports at the top of the file
+    - Add `import com.voximplant.foregroundservice.VIForegroundServicePackage;` to the imports at the top of the file
     - Add `new VIForegroundServicePackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```

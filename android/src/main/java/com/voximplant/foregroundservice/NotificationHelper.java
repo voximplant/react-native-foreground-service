@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.facebook.react.bridge.Promise;
@@ -84,7 +83,7 @@ class NotificationHelper {
         Intent notificationIntent = new Intent(context, mainActivityClass);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-        NotificationCompat.Builder notificationBuilder;
+        Notification.Builder notificationBuilder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = notificationConfig.getString("channelId");
@@ -92,12 +91,35 @@ class NotificationHelper {
                 Log.e("NotificationHelper", "buildNotification: invalid channelId");
                 return null;
             }
-            notificationBuilder = new NotificationCompat.Builder(context, channelId);
+            notificationBuilder = new Notification.Builder(context, channelId);
         } else {
-            notificationBuilder = new NotificationCompat.Builder(context);
+            notificationBuilder = new Notification.Builder(context);
         }
 
-        int priority = notificationConfig.containsKey("priority") ? notificationConfig.getInt("priority") : NotificationCompat.PRIORITY_HIGH;
+        int priorityInt = notificationConfig.containsKey("priority") ? notificationConfig.getInt("priority"): Notification.PRIORITY_HIGH;
+
+        int priority;
+        switch (priorityInt) {
+            case 0:
+                priority = Notification.PRIORITY_DEFAULT;
+                break;
+            case -1:
+                priority = Notification.PRIORITY_LOW;
+                break;
+            case -2:
+                priority = Notification.PRIORITY_MIN;
+                break;
+            case 1:
+                priority = Notification.PRIORITY_HIGH;
+                break;
+            case 2:
+                priority = Notification.PRIORITY_MAX;
+                break;
+            default:
+                priority = Notification.PRIORITY_HIGH;
+                break;
+
+        }
 
         notificationBuilder.setContentTitle(notificationConfig.getString("title"))
                 .setContentText(notificationConfig.getString("text"))

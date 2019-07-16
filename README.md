@@ -13,13 +13,34 @@ See [the Android official documentation](https://developer.android.com/guide/com
 
 `$ npm install @voximplant/react-native-foreground-service --save`
 
-### Mostly automatic installation (Android only)
+### Automatic installation (Android only)
 
-`$ react-native link @voximplant/react-native-foreground-service`
+- React Native 0.60+
 
-Next follow steps #4 and #5 from the manual installation section.
+    CLI autolink feature links the module while building the app.
 
-### Manual installation (Android only)
+    1. Add the FOREGROUND_SERVICE permission to the application's `AndroidManifest.xml`:
+        ```
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+        ```
+    2. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
+        ```
+        <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
+
+- React Native <= 0.59
+
+    `$ react-native link @voximplant/react-native-foreground-service`
+
+    1. Add the FOREGROUND_SERVICE permission to the application's `AndroidManifest.xml`:
+        ```
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+        ```
+    2. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
+        ```
+        <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
+        ```
+
+### Manual installation (Android only, React Native <= 0.59)
 1. Open up `android/app/src/main/java/[...]/MainActivity.java`
     - Add `import com.voximplant.foregroundservice.VIForegroundServicePackage;` to the imports at the top of the file
     - Add `new VIForegroundServicePackage()` to the list returned by the `getPackages()` method

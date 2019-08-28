@@ -41,7 +41,7 @@ See [the Android official documentation](https://developer.android.com/guide/com
         ```
 
 ### Manual installation (Android only, React Native <= 0.59)
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
+1. Open up `android/app/src/main/java/[...]/MainApplication.java`
     - Add `import com.voximplant.foregroundservice.VIForegroundServicePackage;` to the imports at the top of the file
     - Add `new VIForegroundServicePackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:

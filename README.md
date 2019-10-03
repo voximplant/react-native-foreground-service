@@ -139,7 +139,7 @@ NotificationChannelConfig
 |-----------------|-----------------------------------------------------------------------------------------------------------------------|----------|
 | id              | Unique channel id                                                                                                     | yes      |
 | name            | Notification channel name                                                                                             | yes      |
-| description     | Notification channel description                                                                                      | no       |
+| description     | Notification channel description                                                                                      | yes (Android 9+)       |
 | importance      | Notification channel importance. One of:<ul><li>1 – 'min'</li> <li>2 – 'low' (by default)</li><li>3 – 'default'</li><li>4 – 'high'</li><li>5 – 'max'</li></ul> | no       |
 | enableVibration | Sets whether notification posted to this channel should vibrate. False by default.                                    | no       |
 

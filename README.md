@@ -20,11 +20,11 @@ See [the Android official documentation](https://developer.android.com/guide/com
     CLI autolink feature links the module while building the app.
 
     1. Add the FOREGROUND_SERVICE permission to the application's `AndroidManifest.xml`:
-        ```
+        ```xml
         <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
         ```
     2. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
-        ```
+        ```xml
         <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
         ```
 
@@ -33,11 +33,11 @@ See [the Android official documentation](https://developer.android.com/guide/com
     `$ react-native link @voximplant/react-native-foreground-service`
 
     1. Add the FOREGROUND_SERVICE permission to the application's `AndroidManifest.xml`:
-        ```
+        ```xml
         <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
         ```
     2. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
-        ```
+        ```xml
         <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
         ```
 
@@ -55,11 +55,11 @@ See [the Android official documentation](https://developer.android.com/guide/com
     implementation project(':@voximplant_react-native-foreground-service')
   	```
 4. Add the FOREGROUND_SERVICE permission to the application's `AndroidManifest.xml`:
-    ```
+    ```xml
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     ```
 5. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
-    ```
+    ```xml
     <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
     ```
     

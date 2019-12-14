@@ -13,6 +13,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
@@ -126,6 +129,23 @@ class NotificationHelper {
                 .setPriority(priority)
                 .setContentIntent(pendingIntent);
 
+        String color = notificationConfig.getString("color");
+        Boolean colorized = notificationConfig.getBoolean("colorized");
+        if (color != null) {
+            notificationBuilder.setColor(Color.parseColor(color));
+            if (colorized != null) {
+                notificationBuilder.setColorized(colorized);
+            }
+        }
+
+        String iconLargeName = notificationConfig.getString("iconLarge");
+        if (iconLargeName != null) {
+            Bitmap largeIcon = BitmapFactory.decodeResource(
+                context.getResources(),
+                getResourceIdForResourceName(context, iconLargeName)
+                );
+                notificationBuilder.setLargeIcon(largeIcon);
+        }
         String iconName = notificationConfig.getString("icon");
         if (iconName != null) {
             notificationBuilder.setSmallIcon(getResourceIdForResourceName(context, iconName));

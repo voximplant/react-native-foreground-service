@@ -94,6 +94,9 @@ async startForegroundService() {
         title: 'Title',
         text: 'Some text',
         icon: 'ic_icon'
+        iconLarge: 'large_icon',
+        color: '#073f66',
+        colorized: true,
     };
     try {
         await VIForegroundService.startService(notificationConfig);

@@ -1,5 +1,6 @@
+# foreground-service-library-test
 
-# react-native-foreground-service
+This is a clone of react-native-foreground-service with a small change.   An exception thrown when the priority is parsed when the foreground service is started is fixed.
 
 A foreground service performs some operation that is noticeable to the user. 
 For example, an audio app would use a foreground service to play an audio track. 

@@ -12,7 +12,7 @@ See [the Android official documentation](https://developer.android.com/guide/com
 
 ## Getting started 
 
-`$ npm install @voximplant/react-native-foreground-service --save`
+`$ npm install foreground-service-library-test --save`
 
 ### Automatic installation (Android only)
 

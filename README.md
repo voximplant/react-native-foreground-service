@@ -1,5 +1,6 @@
+# foreground-service-library-test
 
-# react-native-foreground-service
+This is a clone of react-native-foreground-service with a small change.   An exception thrown when the priority is parsed in the NotificationHelper.java's buildNotification method is fixed.
 
 A foreground service performs some operation that is noticeable to the user. 
 For example, an audio app would use a foreground service to play an audio track. 
@@ -11,7 +12,7 @@ See [the Android official documentation](https://developer.android.com/guide/com
 
 ## Getting started 
 
-`$ npm install @voximplant/react-native-foreground-service --save`
+`$ npm install foreground-service-library-test --save`
 
 ### Automatic installation (Android only)
 

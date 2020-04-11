@@ -1,5 +1,8 @@
 # Changelog
 
+### 2.0.1
+- Add killOnDestroy
+
 ### 2.0.0
 - RN 0.60 autolinking support
 

@@ -64,6 +64,10 @@ export default class VIForegroundService {
     });
   }
 
+  static async updateNotification(notificationConfig) {
+    return await ForegroundServiceModule.updateNotification(notificationConfig);
+  }
+
   /**
    * Stop foreground service
    *

@@ -39,7 +39,7 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
             promise.reject(ERROR_INVALID_CONFIG, "VIForegroundService: Channel config is invalid");
             return;
         }
-        NotificationHelper.getInstance(getReactApplicationContext()).createNotificationChannel(channelConfig, promise);
+        NotificationHelper.getInstance(getReactApplicationContext()).createNotificationChannel(channelConfig, promise, this.reactContext);
     }
 
     @ReactMethod

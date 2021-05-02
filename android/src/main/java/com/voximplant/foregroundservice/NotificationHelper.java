@@ -170,7 +170,6 @@ class NotificationHelper {
 
                 notificationBuilder.addAction(0, buttonLabel, pendingButtonIntents.get(i));
             }
-            Log.d("TAG", "buildNotification: ");
         }
 
 
@@ -209,15 +208,14 @@ class NotificationHelper {
             String actionLabel = intent.getStringExtra("actionLabel");
             params.putString("actionLabel", actionLabel);
             sendEvent(reactContext, "ActionButtonPress", params);
-                if(redirect){
-                    try {
-                        notifIntent.send();
-                    } catch (PendingIntent.CanceledException e) {
-                        e.printStackTrace();
-                    }
+            context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+            if(redirect){
+                try {
+                    notifIntent.send();
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
                 }
-
-
+            }
         }
     }
 

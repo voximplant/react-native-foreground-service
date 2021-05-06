@@ -62,6 +62,13 @@ public class VIForegroundService extends Service {
             }
         }
         return START_NOT_STICKY;
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
+        mNotificationManager.cancelAll();
+        stopSelf();
     }
 }

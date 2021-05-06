@@ -80,7 +80,11 @@ class NotificationHelper {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, channelImportance);
             channel.setDescription(channelDescription);
             channel.enableVibration(enableVibration);
-            mNotificationManager.createNotificationChannel(channel);
+            try {
+                mNotificationManager.createNotificationChannel(channel);
+            } catch (Exception e) {
+                Log.e("NotificationHelper", "Failed to create notification channel");
+            }
             promise.resolve(null);
         } else {
             promise.reject(ERROR_ANDROID_VERSION, "VIForegroundService: Notification channel can be created on Android O+");

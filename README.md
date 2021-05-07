@@ -25,14 +25,6 @@ See [the Android official documentation](https://developer.android.com/guide/com
      ```
      <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
      ```
-  3. Add receiver if you want to use actions button in notification to the application's `AndroidManifest.xml`:
-     ```
-     <receiver
-         android:name="com.voximplant.foregroundservice.NotificationHelper$NotificationBroadcastReceiver"
-         android:enabled="true"
-         android:exported="true" />
-     ```
-
 - React Native <= 0.59
 
   `$ react-native link @voximplant/react-native-foreground-service`
@@ -68,6 +60,14 @@ See [the Android official documentation](https://developer.android.com/guide/com
    ```
    <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
    ```
+
+## Notification Action buttons
+To use action buttons in foreground notification add the following to the application's `AndroidManifest.xml`
+```
+<receiver android:name="com.voximplant.foregroundservice.NotificationHelper$NotificationBroadcastReceiver"
+         android:enabled="true"
+         android:exported="true" />
+```
 
 ## Demo project
 
@@ -148,6 +148,17 @@ static async createNotificationChannel(channelConfig)
 Creates a notification channel for the foreground service.
 For Android 8+ the notification channel should be created before starting the foreground service
 
+```javascript
+static startListeners(callback)
+```
+Starts listening for action button events the callback is called with `event` parameter with field `actionLabel` which matches the `actionLabel` provided in config
+
+```javascript
+static async updateNotification(notificationConfig)
+```
+Updates foreground notification. You can update title, description, action button config. Accepts the updated notification config.
+> **Note: Make sure to keep `id` and `channelId` same as that of original notification config**
+
 ### Configs
 
 ```javascript
@@ -174,3 +185,4 @@ NotificationConfig;
 | text          | Notification text                                                                                                                                                                                                   | yes                   |
 | icon          | Icon name                                                                                                                                                                                                           | yes                   |
 | priority      | Priority of this notification. One of: <ul><li>&nbsp;0 – PRIORITY_DEFAULT (by default)</li><li>-1 – PRIORITY_LOW</li><li>-2 – PRIORITY_MIN</li><li>&nbsp;1 – PRIORITY_HIGH</li><li>&nbsp;2 – PRIORITY_MAX</li></ul> | no                    |
+|actionButtons|Array of objects of type <br/> { label: String, id: number, actionLabel: string, redirect: boolean } <br/> for action buttons to be displayed in foreground notification where `label` is the display label on notification, `actionLabel` is the event param string emited when button is clicked and `redirect` is for whether to redirect to app when the button is clicked  |no

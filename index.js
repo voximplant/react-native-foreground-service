@@ -63,6 +63,10 @@ export default class VIForegroundService {
       callback(event);
     });
   }
+  
+  static stopListeners() {
+    this.eventListener.remove();
+  }
 
   static async updateNotification(notificationConfig) {
     return await ForegroundServiceModule.updateNotification(notificationConfig);

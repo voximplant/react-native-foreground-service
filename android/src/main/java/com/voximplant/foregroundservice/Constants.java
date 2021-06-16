@@ -7,6 +7,7 @@ package com.voximplant.foregroundservice;
 class Constants {
     static final String ACTION_FOREGROUND_SERVICE_START = "com.voximplant.foregroundservice.service_start";
     static final String ACTION_FOREGROUND_SERVICE_STOP = "com.voximplant.foregroundservice.service_stop";
+    static final String ACTION_UPDATE_NOTIFICATION = "com.voximplant.foregroundservice.action_update_notification";
 
     static final String NOTIFICATION_CONFIG = "com.voximplant.foregroundservice.notif_config";
 

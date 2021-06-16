@@ -4,6 +4,7 @@
 
 package com.voximplant.foregroundservice;
 
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
@@ -14,6 +15,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
 import static com.voximplant.foregroundservice.Constants.ERROR_SERVICE_ERROR;
@@ -39,7 +41,7 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
             promise.reject(ERROR_INVALID_CONFIG, "VIForegroundService: Channel config is invalid");
             return;
         }
-        NotificationHelper.getInstance(getReactApplicationContext()).createNotificationChannel(channelConfig, promise);
+        NotificationHelper.getInstance(getReactApplicationContext()).createNotificationChannel(channelConfig, promise, this.reactContext);
     }
 
     @ReactMethod
@@ -84,6 +86,41 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
             promise.resolve(null);
         } else {
             promise.reject(ERROR_SERVICE_ERROR, "VIForegroundService: Foreground service is not started");
+        }
+    }
+
+    @ReactMethod
+    public void updateNotification(ReadableMap notificationConfig, Promise promise) {
+        if (notificationConfig == null) {
+            promise.reject(ERROR_INVALID_CONFIG, "ForegroundService: Notification config is invalid");
+            return;
+        }
+
+        if (!notificationConfig.hasKey("id")) {
+            promise.reject(ERROR_INVALID_CONFIG , "ForegroundService: id is required");
+            return;
+        }
+
+        if (!notificationConfig.hasKey("title")) {
+            promise.reject(ERROR_INVALID_CONFIG, "ForegroundService: title is reqired");
+            return;
+        }
+
+        try{
+
+            Intent intent = new Intent(getReactApplicationContext(), VIForegroundService.class);
+            intent.setAction(Constants.ACTION_UPDATE_NOTIFICATION);
+            intent.putExtra(NOTIFICATION_CONFIG, Arguments.toBundle(notificationConfig));
+            ComponentName componentName = getReactApplicationContext().startService(intent);
+
+            if (componentName != null) {
+                promise.resolve(null);
+            } else {
+                promise.reject(ERROR_SERVICE_ERROR, "Update notification failed.");
+            }
+        }
+        catch(IllegalStateException e){
+            promise.reject(ERROR_SERVICE_ERROR, "Update notification failed, service failed to start.");
         }
     }
 

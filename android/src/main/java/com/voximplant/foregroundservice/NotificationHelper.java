@@ -4,18 +4,30 @@
 
 package com.voximplant.foregroundservice;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
+
+import java.util.ArrayList;
 
 import static com.voximplant.foregroundservice.Constants.ERROR_ANDROID_VERSION;
 import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
@@ -31,12 +43,16 @@ class NotificationHelper {
         return instance;
     }
 
+    private static ReactContext reactContext;
+    private static PendingIntent notifIntent;
+
     private NotificationHelper(Context context) {
         mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
     }
 
-    void createNotificationChannel(ReadableMap channelConfig, Promise promise) {
+    void createNotificationChannel(ReadableMap channelConfig, Promise promise, ReactContext reactContextParam) {
+        reactContext = reactContextParam;
         if (channelConfig == null) {
             Log.e("NotificationHelper", "createNotificationChannel: invalid config");
             promise.reject(ERROR_INVALID_CONFIG, "VIForegroundService: Channel config is invalid");
@@ -64,11 +80,16 @@ class NotificationHelper {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, channelImportance);
             channel.setDescription(channelDescription);
             channel.enableVibration(enableVibration);
-            mNotificationManager.createNotificationChannel(channel);
+            try {
+                mNotificationManager.createNotificationChannel(channel);
+            } catch (Exception e) {
+                Log.e("NotificationHelper", "Failed to create notification channel");
+            }
             promise.resolve(null);
         } else {
             promise.reject(ERROR_ANDROID_VERSION, "VIForegroundService: Notification channel can be created on Android O+");
         }
+
     }
 
     Notification buildNotification(Context context, Bundle notificationConfig) {
@@ -81,8 +102,9 @@ class NotificationHelper {
             return null;
         }
         Intent notificationIntent = new Intent(context, mainActivityClass);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        notifIntent = pendingIntent;
         Notification.Builder notificationBuilder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -131,6 +153,31 @@ class NotificationHelper {
             notificationBuilder.setSmallIcon(getResourceIdForResourceName(context, iconName));
         }
 
+        if(notificationConfig.containsKey("actionButtons")){
+            ArrayList<Bundle> buttons = (ArrayList<Bundle>) notificationConfig.get("actionButtons");
+
+            int numButtons = buttons.size();
+            ArrayList<Intent> buttonIntents = new ArrayList<Intent>();
+            ArrayList<PendingIntent> pendingButtonIntents = new ArrayList<PendingIntent>();
+
+            for(int i=0; i < numButtons; i++){
+                Bundle button = buttons.get(i);
+                String buttonLabel = button.getString("label");
+                String actionLabel = button.getString("actionLabel");
+                boolean redirect = button.getBoolean("redirect");
+                buttonIntents.add(i, new Intent(context, NotificationBroadcastReceiver.class));
+
+                buttonIntents.get(i).putExtra("actionLabel", actionLabel);
+                buttonIntents.get(i).putExtra("redirect", redirect);
+
+                pendingButtonIntents.add(i, PendingIntent.getBroadcast(context,i+1, buttonIntents.get(i), PendingIntent.FLAG_UPDATE_CURRENT));
+
+                notificationBuilder.addAction(0, buttonLabel, pendingButtonIntents.get(i));
+            }
+        }
+
+
+
         return notificationBuilder.build();
     }
 
@@ -146,6 +193,33 @@ class NotificationHelper {
         } catch (ClassNotFoundException e) {
             Log.e("NotificationHelper", "Failed to get main activity class");
             return null;
+        }
+    }
+
+    public static class NotificationBroadcastReceiver extends BroadcastReceiver {
+        public NotificationBroadcastReceiver(){}
+        private void sendEvent(ReactContext reactContext,
+                               String eventName,
+                               @Nullable WritableMap params) {
+            reactContext
+                    .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                    .emit(eventName, params);
+        }
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            WritableMap params = Arguments.createMap();
+            boolean redirect = intent.getBooleanExtra("redirect", false);
+            String actionLabel = intent.getStringExtra("actionLabel");
+            params.putString("actionLabel", actionLabel);
+            sendEvent(reactContext, "ActionButtonPress", params);
+            context.sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+            if(redirect){
+                try {
+                    notifIntent.send();
+                } catch (PendingIntent.CanceledException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

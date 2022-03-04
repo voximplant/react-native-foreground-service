@@ -8,8 +8,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.util.Log;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 
+import static com.voximplant.foregroundservice.Constants.BUTTON_PRESSED;
 import static com.voximplant.foregroundservice.Constants.ERROR_ANDROID_VERSION;
 import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
 
@@ -83,6 +86,10 @@ class NotificationHelper {
         Intent notificationIntent = new Intent(context, mainActivityClass);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+        Intent buttonIntent = new Intent();
+        buttonIntent.setAction(Constants.BUTTON_PRESSED);
+        PendingIntent pendingButtonIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, 0);
+
         Notification.Builder notificationBuilder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -129,6 +136,10 @@ class NotificationHelper {
         String iconName = notificationConfig.getString("icon");
         if (iconName != null) {
             notificationBuilder.setSmallIcon(getResourceIdForResourceName(context, iconName));
+        }
+
+        if (notificationConfig.containsKey("button")) {
+            notificationBuilder.addAction(0, notificationConfig.getString("button"), pendingButtonIntent);
         }
 
         return notificationBuilder.build();

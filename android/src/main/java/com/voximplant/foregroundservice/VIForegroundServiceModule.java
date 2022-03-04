@@ -6,6 +6,7 @@ package com.voximplant.foregroundservice;
 
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 
 import com.facebook.react.bridge.Arguments;
@@ -14,18 +15,38 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
 import static com.voximplant.foregroundservice.Constants.ERROR_SERVICE_ERROR;
 import static com.voximplant.foregroundservice.Constants.NOTIFICATION_CONFIG;
+import static com.voximplant.foregroundservice.Constants.BUTTON_PRESSED;
 
-public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
+import javax.annotation.Nullable;
+
+interface IBroadcastListener {
+    void buttonPressedEvent();
+}
+
+public class VIForegroundServiceModule extends ReactContextBaseJavaModule implements IBroadcastListener {
 
     private final ReactApplicationContext reactContext;
+    private ForegroundReceiver foregroundReceiver = new ForegroundReceiver();
 
     public VIForegroundServiceModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+    }
+
+    @ReactMethod
+    public void addListener(String eventName) {
+        // Set up any upstream listeners or background tasks as necessary
+    }
+
+    @ReactMethod
+    public void removeListeners(Integer count) {
+        // Remove upstream listeners, stop unnecessary background tasks
     }
 
     @Override
@@ -80,6 +101,12 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
         intent.setAction(Constants.ACTION_FOREGROUND_SERVICE_START);
         intent.putExtra(NOTIFICATION_CONFIG, Arguments.toBundle(notificationConfig));
         ComponentName componentName = getReactApplicationContext().startService(intent);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BUTTON_PRESSED);
+        getReactApplicationContext().registerReceiver(foregroundReceiver, filter);
+        foregroundReceiver.addListener(this);
+
         if (componentName != null) {
             promise.resolve(null);
         } else {
@@ -97,5 +124,17 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
         } else {
             promise.reject(ERROR_SERVICE_ERROR, "VIForegroundService: Foreground service failed to stop");
         }
+    }
+
+    public void buttonPressedEvent() {
+        WritableMap params = Arguments.createMap();
+        params.putString("event", BUTTON_PRESSED);
+        sendEvent("VIForegroundServiceButtonPressed", params);
+    }
+
+    private void sendEvent(String eventName, @Nullable WritableMap params) {
+        reactContext
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(eventName, params);
     }
 }

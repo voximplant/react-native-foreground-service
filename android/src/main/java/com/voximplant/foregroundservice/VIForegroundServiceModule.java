@@ -4,7 +4,9 @@
 
 package com.voximplant.foregroundservice;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
@@ -25,11 +27,15 @@ import static com.voximplant.foregroundservice.Constants.BUTTON_PRESSED;
 
 import javax.annotation.Nullable;
 
-interface IBroadcastListener {
-    void buttonPressedEvent();
-}
 
-public class VIForegroundServiceModule extends ReactContextBaseJavaModule implements IBroadcastListener {
+public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
+
+    class ForegroundReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            buttonPressedEvent();
+        }
+    }
 
     private final ReactApplicationContext reactContext;
     private ForegroundReceiver foregroundReceiver = new ForegroundReceiver();
@@ -105,7 +111,6 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule implem
         IntentFilter filter = new IntentFilter();
         filter.addAction(BUTTON_PRESSED);
         getReactApplicationContext().registerReceiver(foregroundReceiver, filter);
-        foregroundReceiver.addListener(this);
 
         if (componentName != null) {
             promise.resolve(null);

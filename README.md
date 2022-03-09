@@ -137,8 +137,7 @@ For Android 8+ the notification channel should be created before starting the fo
 ```javascript
 on(event, handler)
 ```
-Adds a `handler` to be invoked when button on notification will be pressed.
-The data arguments emitted will be passed to the `handler` function.
+Adds a `handler` to be invoked when a button on the notification is pressed.
 Supported event: `VIForegroundServiceButtonPressed`.
 
 ------------------------------
@@ -147,7 +146,7 @@ Supported event: `VIForegroundServiceButtonPressed`.
 off(event, handler)
 ```
 Removes the registered `handler` for the `VIForegroundServiceButtonPressed` event.
-If `handler`'s is not provided, this function will remove all registered handlers.
+If `handler` is not provided, this function will remove all registered handlers.
 
 ### Configs
 ```javascript

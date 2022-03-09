@@ -17,6 +17,7 @@ import android.util.Log;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 
+import static com.voximplant.foregroundservice.Constants.FOREGROUND_SERVICE_BUTTON_PRESSED;
 import static com.voximplant.foregroundservice.Constants.ERROR_ANDROID_VERSION;
 import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
 
@@ -129,6 +130,14 @@ class NotificationHelper {
         String iconName = notificationConfig.getString("icon");
         if (iconName != null) {
             notificationBuilder.setSmallIcon(getResourceIdForResourceName(context, iconName));
+        }
+
+        if (notificationConfig.containsKey("button")) {
+            Intent buttonIntent = new Intent();
+            buttonIntent.setAction(FOREGROUND_SERVICE_BUTTON_PRESSED);
+            PendingIntent pendingButtonIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, 0);
+
+            notificationBuilder.addAction(0, notificationConfig.getString("button"), pendingButtonIntent);
         }
 
         return notificationBuilder.build();

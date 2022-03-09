@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
@@ -23,9 +24,8 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
 import static com.voximplant.foregroundservice.Constants.ERROR_SERVICE_ERROR;
 import static com.voximplant.foregroundservice.Constants.NOTIFICATION_CONFIG;
-import static com.voximplant.foregroundservice.Constants.BUTTON_PRESSED;
+import static com.voximplant.foregroundservice.Constants.FOREGROUND_SERVICE_BUTTON_PRESSED;
 
-import javax.annotation.Nullable;
 
 
 public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
@@ -109,7 +109,7 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
         ComponentName componentName = getReactApplicationContext().startService(intent);
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction(BUTTON_PRESSED);
+        filter.addAction(FOREGROUND_SERVICE_BUTTON_PRESSED);
         getReactApplicationContext().registerReceiver(foregroundReceiver, filter);
 
         if (componentName != null) {
@@ -133,7 +133,7 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
 
     public void buttonPressedEvent() {
         WritableMap params = Arguments.createMap();
-        params.putString("event", BUTTON_PRESSED);
+        params.putString("event", FOREGROUND_SERVICE_BUTTON_PRESSED);
         sendEvent("VIForegroundServiceButtonPressed", params);
     }
 

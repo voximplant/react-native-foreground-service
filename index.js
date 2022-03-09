@@ -91,8 +91,8 @@ class VIForegroundService {
     }
 
     /**
-     * Adds a listener to be invoked when button on notification will be pressed.
-     * The data arguments emitted will be passed to the listener function.
+     * Adds a handler to be invoked when button on notification will be pressed.
+     * The data arguments emitted will be passed to the handler function.
      *
      * @param event - Name of the event to listen to
      * @param handler - Function to invoke when the specified event is emitted

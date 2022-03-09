@@ -93,7 +93,8 @@ async startForegroundService() {
         id: 3456,
         title: 'Title',
         text: 'Some text',
-        icon: 'ic_icon'
+        icon: 'ic_icon',
+        button: 'Some text',
     };
     try {
         await VIForegroundService.startService(notificationConfig);
@@ -112,24 +113,41 @@ VIForegroundService.stopService();
 
 ### Methods
 ```javascript
-static async startService(notificationConfig)
+async startService(notificationConfig)
 ```
 Starts the foreground service and displays a notification with the defined configuration
 
 ------------------------------
 
 ```javascript
-static async stopService()
+async stopService()
 ```
 Stops the foreground service
 
 ------------------------------
 
 ```javascript
-static async createNotificationChannel(channelConfig)
+async createNotificationChannel(channelConfig)
 ```
 Creates a notification channel for the foreground service. 
 For Android 8+ the notification channel should be created before starting the foreground service
+
+------------------------------
+
+```javascript
+on(event, handler)
+```
+Adds a `handler` to be invoked when button on notification will be pressed.
+The data arguments emitted will be passed to the `handler` function.
+Supported event: `VIForegroundServiceButtonPressed`.
+
+------------------------------
+
+```javascript
+off(event, handler)
+```
+Removes the registered `handler` for the `VIForegroundServiceButtonPressed` event.
+If `handler`'s is not provided, this function will remove all registered handlers.
 
 ### Configs
 ```javascript
@@ -154,4 +172,5 @@ NotificationConfig
 | title         | Notification title                                                                                                                                      | yes                   |
 | text          | Notification text                                                                                                                                       | yes                   |
 | icon          | Icon name                                                                                                                                               | yes                   |
+| button        | Button text                                                                                                                                             | no                    |
 | priority      | Priority of this notification. One of: <ul><li>&nbsp;0 – PRIORITY_DEFAULT (by default)</li><li>-1 – PRIORITY_LOW</li><li>-2 – PRIORITY_MIN</li><li>&nbsp;1 – PRIORITY_HIGH</li><li>&nbsp;2 – PRIORITY_MAX</li></ul> | no       |

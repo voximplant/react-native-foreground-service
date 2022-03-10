@@ -1,6 +1,6 @@
 {
   "name": "@voximplant/react-native-foreground-service",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "React native module to start foreground service on android",
   "main": "index.js",
   "scripts": {

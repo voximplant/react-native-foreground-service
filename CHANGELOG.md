@@ -1,5 +1,8 @@
 # Changelog
 
+### 3.0.1
+- Fix: Reference error on action button click if there are no handlers for this event
+
 ### 3.0.0
 - All static methods are changed to instance methods.
   Now, to call public APIs, it is required to get the shared instance via `VIForegroundService.getInstance()` API

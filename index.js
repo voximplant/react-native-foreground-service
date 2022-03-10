@@ -135,7 +135,7 @@ class VIForegroundService {
         if (handlers) {
             handlers.forEach((handler) => handler(...args));
         } else {
-            console.log(`[VIForegroundService]: _emit: no handlers for event: ${eventType}`);
+            console.log(`[VIForegroundService]: _emit: no handlers for event: ${event}`);
         }
     }
 

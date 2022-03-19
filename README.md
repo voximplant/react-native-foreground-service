@@ -25,7 +25,9 @@ See [the Android official documentation](https://developer.android.com/guide/com
         ```
     2. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
         ```
-        <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
+        <service android:name="com.voximplant.foregroundservice.VIForegroundService" 
+        		android:stopWithTask="true"/>
+        ```
 
 - React Native <= 0.59
 
@@ -37,7 +39,8 @@ See [the Android official documentation](https://developer.android.com/guide/com
         ```
     2. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
         ```
-        <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
+        <service android:name="com.voximplant.foregroundservice.VIForegroundService" 
+        		android:stopWithTask="true"/>
         ```
 
 ### Manual installation (Android only, React Native <= 0.59)
@@ -45,21 +48,22 @@ See [the Android official documentation](https://developer.android.com/guide/com
     - Add `import com.voximplant.foregroundservice.VIForegroundServicePackage;` to the imports at the top of the file
     - Add `new VIForegroundServicePackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
-  	```
-  	include ':@voximplant_react-native-foreground-service'
+    	```
+    	include ':@voximplant_react-native-foreground-service'
     project(':@voximplant_react-native-foreground-service').projectDir = new File(rootProject.projectDir, '../node_modules/@voximplant/react-native-foreground-service/android')
-  	```
+  ```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-  	```
+    	```
     implementation project(':@voximplant_react-native-foreground-service')
-  	```
+  ```
 4. Add the FOREGROUND_SERVICE permission to the application's `AndroidManifest.xml`:
     ```
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     ```
 5. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
     ```
-    <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
+    <service android:name="com.voximplant.foregroundservice.VIForegroundService" 
+    		android:stopWithTask="true"/>
     ```
     
 ## Demo project

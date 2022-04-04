@@ -4,10 +4,16 @@
 
 'use strict';
 
-import { NativeModules, NativeEventEmitter } from 'react-native';
+import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+
+const isIOS = Platform.OS === 'ios';
+const isAndroid = Platform.OS === 'android';
 
 const ForegroundServiceModule = NativeModules.VIForegroundService;
-const EventEmitter = new NativeEventEmitter(ForegroundServiceModule);
+let EventEmitter;
+if (isAndroid) {
+    EventEmitter = new NativeEventEmitter(ForegroundServiceModule);
+}
 
 /**
  * @property {string} channelId - Notification channel id to display notification
@@ -52,7 +58,9 @@ class VIForegroundService {
      * @private
      */
     constructor() {
-        EventEmitter.addListener('VIForegroundServiceButtonPressed', this._VIForegroundServiceButtonPressed.bind(this));
+        if (isAndroid) {
+            EventEmitter.addListener('VIForegroundServiceButtonPressed', this._VIForegroundServiceButtonPressed.bind(this));
+        }
     }
 
     static getInstance() {
@@ -69,6 +77,10 @@ class VIForegroundService {
      * @return Promise
      */
     async createNotificationChannel(channelConfig) {
+        if (isIOS) {
+            console.warn("ForegroundService may be used only Android platfrom.")
+            return;
+        }
         return await ForegroundServiceModule.createNotificationChannel(channelConfig);
     }
 
@@ -78,6 +90,10 @@ class VIForegroundService {
      * @return Promise
      */
     async startService(notificationConfig) {
+        if (isIOS) {
+            console.warn("ForegroundService may be used only Android platfrom.")
+            return;
+        }
         return await ForegroundServiceModule.startService(notificationConfig);
     }
 
@@ -87,6 +103,10 @@ class VIForegroundService {
      * @return Promise
      */
     async stopService() {
+        if (isIOS) {
+            console.warn("ForegroundService may be used only Android platfrom.")
+            return;
+        }
         return await ForegroundServiceModule.stopService();
     }
 
@@ -98,6 +118,10 @@ class VIForegroundService {
      * @param handler - Function to invoke when the specified event is emitted
      */
     on(event, handler) {
+        if (isIOS) {
+            console.warn("ForegroundService may be used only Android platfrom.")
+            return;
+        }
         if (!handler || !(handler instanceof Function)) {
             console.warn(`ForegroundService: on: handler is not a Function`);
             return;
@@ -117,6 +141,10 @@ class VIForegroundService {
      * @param handler - Handler function.
      */
     off(event, handler) {
+        if (isIOS) {
+            console.warn("ForegroundService may be used only Android platfrom.")
+            return;
+        }
         if (!this._listeners.has(event)) {
           return;
         }

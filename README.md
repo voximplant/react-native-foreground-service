@@ -62,8 +62,8 @@ See [the Android official documentation](https://developer.android.com/guide/com
     <service android:name="com.voximplant.foregroundservice.VIForegroundService"
              android:exported="false"> </service>
     ```
-6. ### For targetSdkVersion Android API >= 31
-    Add android:exported="true" to the application's `AndroidManifest.xml` activity section
+6. For targetSdkVersion Android API >= 31
+   Add android:exported="true" to the application's `AndroidManifest.xml` activity section
     ```
     <activity
         android:name=".MainActivity"

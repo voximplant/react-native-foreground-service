@@ -82,7 +82,8 @@ class NotificationHelper {
             return null;
         }
         Intent notificationIntent = new Intent(context, mainActivityClass);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? (PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT) : PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder notificationBuilder;
 
@@ -133,7 +134,8 @@ class NotificationHelper {
         if (notificationConfig.containsKey("button")) {
             Intent buttonIntent = new Intent();
             buttonIntent.setAction(FOREGROUND_SERVICE_BUTTON_PRESSED);
-            PendingIntent pendingButtonIntent = PendingIntent.getBroadcast(context, 0, buttonIntent, PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent pendingButtonIntent = PendingIntent.getBroadcast(context, 0, buttonIntent,
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) ? (PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT) : PendingIntent.FLAG_UPDATE_CURRENT);
 
             notificationBuilder.addAction(0, notificationConfig.getString("button"), pendingButtonIntent);
         }

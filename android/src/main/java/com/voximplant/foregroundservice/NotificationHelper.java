@@ -110,12 +110,10 @@ class NotificationHelper {
             case -2:
                 priority = Notification.PRIORITY_MIN;
                 break;
-            case 1:
-                priority = Notification.PRIORITY_HIGH;
-                break;
             case 2:
                 priority = Notification.PRIORITY_MAX;
                 break;
+            case 1:
             default:
                 priority = Notification.PRIORITY_HIGH;
                 break;

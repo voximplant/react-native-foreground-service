@@ -59,24 +59,20 @@ See [the Android official documentation](https://developer.android.com/guide/com
     ```
 5. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
     ```
-    <service android:name="com.voximplant.foregroundservice.VIForegroundService"> </service>
-    ```
-
-### For Android API >= 31
-1. Add VIForegroundService as a service to the application's `AndroidManifest.xml`:
-    ```
     <service android:name="com.voximplant.foregroundservice.VIForegroundService"
              android:exported="false"> </service>
     ```
-2. Add android:exported="true" to the application's `AndroidManifest.xml` activity section
+6. ### For targetSdkVersion Android API >= 31
+    Add android:exported="true" to the application's `AndroidManifest.xml` activity section
     ```
     <activity
-                android:name=".MainActivity"
-                android:label="@string/app_name"
-                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-                android:windowSoftInputMode="adjustResize"
-                android:exported="true"> <====== This line
+        android:name=".MainActivity"
+        android:label="@string/app_name"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:windowSoftInputMode="adjustResize"
+        android:exported="true">        <===== Add this line
     ```
+
 ## Demo project
 Demo application: [react-native-foreground-service-demo](https://github.com/voximplant/react-native-foreground-service-demo)
   	

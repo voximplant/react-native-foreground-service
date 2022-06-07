@@ -78,7 +78,7 @@ class VIForegroundService {
      */
     async createNotificationChannel(channelConfig) {
         if (isIOS) {
-            console.warn("ForegroundService may be used only Android platfrom.")
+            console.warn("ForegroundService should be used only on Android platfrom.")
             return;
         }
         return await ForegroundServiceModule.createNotificationChannel(channelConfig);
@@ -91,7 +91,7 @@ class VIForegroundService {
      */
     async startService(notificationConfig) {
         if (isIOS) {
-            console.warn("ForegroundService may be used only Android platfrom.")
+            console.warn("ForegroundService should be used only on Android platfrom.")
             return;
         }
         return await ForegroundServiceModule.startService(notificationConfig);
@@ -104,7 +104,7 @@ class VIForegroundService {
      */
     async stopService() {
         if (isIOS) {
-            console.warn("ForegroundService may be used only Android platfrom.")
+            console.warn("ForegroundService should be used only on Android platfrom.")
             return;
         }
         return await ForegroundServiceModule.stopService();
@@ -119,7 +119,7 @@ class VIForegroundService {
      */
     on(event, handler) {
         if (isIOS) {
-            console.warn("ForegroundService may be used only Android platfrom.")
+            console.warn("ForegroundService should be used only on Android platfrom.")
             return;
         }
         if (!handler || !(handler instanceof Function)) {
@@ -142,7 +142,7 @@ class VIForegroundService {
      */
     off(event, handler) {
         if (isIOS) {
-            console.warn("ForegroundService may be used only Android platfrom.")
+            console.warn("ForegroundService should be used only on Android platfrom.")
             return;
         }
         if (!this._listeners.has(event)) {

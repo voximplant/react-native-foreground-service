@@ -94,7 +94,7 @@ const channelConfig = {
     description: 'Channel description',
     enableVibration: false
 };
-VIForegroundService.createNotificationChannel(channelConfig);
+await VIForegroundService.getInstance().createNotificationChannel(channelConfig);
 ```
 
 ### Start foreground service
@@ -109,7 +109,7 @@ async startForegroundService() {
         button: 'Some text',
     };
     try {
-        await VIForegroundService.startService(notificationConfig);
+        await VIForegroundService.getInstance().startService(notificationConfig);
     } catch (e) {
         console.error(e);
     }
@@ -118,7 +118,7 @@ async startForegroundService() {
 
 ### Stop foreground service
 ```javascript
-VIForegroundService.stopService();
+await VIForegroundService.getInstance().stopService();
 ```
 
 ## Reference

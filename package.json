@@ -4,7 +4,9 @@
   "description": "React native module to start foreground service on android",
   "main": "index.js",
   "scripts": {
+    "build": "npx -p typescript tsc --declaration --declarationDir types/ --emitDeclarationOnly --allowJs index.js"
   },
+  "typings": "types/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/voximplant/react-native-foreground-service.git"

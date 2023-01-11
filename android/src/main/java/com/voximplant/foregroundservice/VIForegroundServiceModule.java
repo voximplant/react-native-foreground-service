@@ -20,6 +20,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.LifecycleEventListener;
 
 import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
 import static com.voximplant.foregroundservice.Constants.ERROR_SERVICE_ERROR;
@@ -28,7 +29,9 @@ import static com.voximplant.foregroundservice.Constants.FOREGROUND_SERVICE_BUTT
 
 
 
-public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
+public class VIForegroundServiceModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
+
+    private boolean killOnDestroy;
 
     class ForegroundReceiver extends BroadcastReceiver {
         @Override
@@ -43,6 +46,8 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
     public VIForegroundServiceModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
+        this.killOnDestroy = false;
+        reactContext.addLifecycleEventListener(this);
     }
 
     @ReactMethod
@@ -141,5 +146,28 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
+    }
+
+    
+    @Override
+    public void onHostResume() {
+        // Activity `onResume`
+    }
+
+    @Override
+    public void onHostPause() {
+        // Activity `onPause`
+    }
+
+    @Override
+    public void onHostDestroy() {
+        if(this.killOnDestroy) {
+            Intent intent = new Intent(getReactApplicationContext(), VIForegroundService.class);
+            intent.setAction(Constants.ACTION_FOREGROUND_SERVICE_STOP);
+            getReactApplicationContext().stopService(intent);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0);
+        }
+
     }
 }

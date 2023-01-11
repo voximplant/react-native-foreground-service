@@ -46,7 +46,7 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule implem
     public VIForegroundServiceModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
-        this.killOnDestroy = false;
+        this.killOnDestroy = true;
         reactContext.addLifecycleEventListener(this);
     }
 
@@ -161,10 +161,12 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule implem
 
     @Override
     public void onHostDestroy() {
+        System.out.println("onHostDestroy");
         if(this.killOnDestroy) {
             Intent intent = new Intent(getReactApplicationContext(), VIForegroundService.class);
             intent.setAction(Constants.ACTION_FOREGROUND_SERVICE_STOP);
             getReactApplicationContext().stopService(intent);
+            System.out.println("onHostDestroy - killed");
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(0);
         }

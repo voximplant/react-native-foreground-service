@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2011-2019, Zingaya, Inc. All rights reserved.
  */
-
 package com.voximplant.foregroundservice;
 
 import android.content.BroadcastReceiver;
@@ -25,6 +24,7 @@ import static com.voximplant.foregroundservice.Constants.ERROR_INVALID_CONFIG;
 import static com.voximplant.foregroundservice.Constants.ERROR_SERVICE_ERROR;
 import static com.voximplant.foregroundservice.Constants.NOTIFICATION_CONFIG;
 import static com.voximplant.foregroundservice.Constants.FOREGROUND_SERVICE_BUTTON_PRESSED;
+import static android.content.Context.RECEIVER_NOT_EXPORTED;
 
 
 
@@ -110,7 +110,12 @@ public class VIForegroundServiceModule extends ReactContextBaseJavaModule {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(FOREGROUND_SERVICE_BUTTON_PRESSED);
-        getReactApplicationContext().registerReceiver(foregroundReceiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getReactApplicationContext().registerReceiver(foregroundReceiver, filter, RECEIVER_NOT_EXPORTED);
+        } else {
+            getReactApplicationContext().registerReceiver(foregroundReceiver, filter);
+        }
+       
 
         if (componentName != null) {
             promise.resolve(null);
